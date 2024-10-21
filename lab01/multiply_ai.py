@@ -2,6 +2,7 @@
 # https://deepmind.google/discover/blog/discovering-novel-algorithms-with-alphatensor/#:~:text=In%20our%20paper,%20published%20today%20in%20Nature,%20we
 
 import numpy as np
+import time
 
 
 def ai_matrix_multiply(A, B):
@@ -126,3 +127,18 @@ def ai_matrix_multiply(A, B):
 
 
     return C
+
+def generate_time_ai():
+    A = generate_random_matrix(4, 5)
+    B = generate_random_matrix(5, 5)
+    
+    start_time = time.time()
+    result = ai_matrix_multiply(A, B)
+    end_time = time.time()
+    
+    final_time = (end_time - start_time)
+    
+    print(final_time)
+    
+def generate_random_matrix(n, m):
+    return np.random.uniform(low=1e-8, high=1.0, size=(n, m))
