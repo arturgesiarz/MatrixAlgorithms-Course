@@ -1,8 +1,18 @@
 # Recursive matrix multiplication using  Binét’s method
+# O(n^3)
 
 import numpy as np
 
 def binet_matrix_multiply(A, B):
+    """Matrix multiplication using Binét’s method
+
+    Args:
+        A : matrix
+        B : matrix
+
+    Returns:
+        C : Matrix product of A and B
+    """
     n = A.shape[0]
     
     A = pad_matrix(A)
@@ -12,6 +22,15 @@ def binet_matrix_multiply(A, B):
     return C[:n, :n]
 
 def pad_matrix(A):
+    """Matrix padding with zeros to make it a square matrix of size 2^k which
+    k is the smallest integer such that 2^k >= n
+
+    Args:
+        A : matrix
+
+    Returns:
+        C : Matrix padded with zeros
+    """
     n = A.shape[0]
     m = 1 << (n - 1).bit_length()
     if n < m:
@@ -19,6 +38,15 @@ def pad_matrix(A):
     return A
 
 def binet_matrix_multiply_recursive(A, B):
+    """Recursive matrix multiplication using Binét’s method
+
+    Args:
+        A : Matrix n x n, where n is a power of 2
+        B : Matrix n x n, where n is a power of 2
+        
+    Returns:
+        C : Matrix product of A and B
+    """
     n = A.shape[0]
 
     if n == 1:
