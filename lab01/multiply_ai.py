@@ -4,11 +4,7 @@
 import numpy as np
 
 
-def generate_random_matrix(rows, cols):
-    return np.random.uniform(1e-8, 1.0, (rows, cols))
-
-
-def multiply_ai(A, B):
+def ai_matrix_multiply(A, B):
 
     a11, a12, a13, a14, a15 = A[0, 0], A[0, 1], A[0, 2], A[0, 3], A[0, 4]
     a21, a22, a23, a24, a25 = A[1, 0], A[1, 1], A[1, 2], A[1, 3], A[1, 4]
@@ -130,33 +126,3 @@ def multiply_ai(A, B):
 
 
     return C
-
-def compare(C1, C2):
-    error = False
-    for i in range(C1.shape[0]):
-        for j in range(C1.shape[1]):
-            if round(C1[i, j], 8) != round(C2[i, j], 8):
-                print(f'Different elements [{i},{j}]: C1={C[i,j]:.8f}, C2={C2[i,j]:.8f}')
-                error = True
-            
-    if not error:
-        print('Same elements in each position')
-
-
-
-A = generate_random_matrix(4, 5)
-B = generate_random_matrix(5, 5)
-C = multiply_ai(A, B)
-
-print("A:")
-print(A)
-print("B:")
-print(B)
-print("C:")
-print(C)
-print("C check:")
-print(A @ B)
-
-compare(C, A @ B)
-
-

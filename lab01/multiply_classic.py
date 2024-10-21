@@ -13,11 +13,11 @@ def classic_matrix_multiply(A, B):
     Returns:
         C: matrix given by the multiplication of A and B
     """
-    n = A.shape[0]
-    C = np.zeros((n, n))
 
-    for i in range(n):
-        for j in range(n):
-            for k in range(n):
+    C = np.zeros((A.shape[0], B.shape[1]))
+
+    for i in range(A.shape[0]):
+        for j in range(B.shape[1]):
+            for k in range(B.shape[0]):
                 C[i, j] += A[i, k] * B[k, j]
     return C
