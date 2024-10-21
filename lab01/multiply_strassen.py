@@ -2,6 +2,7 @@
 
 import numpy as np
 
+
 def strassen_matrix_multiply(A, B):
     n = len(A)
     flops = [0]
@@ -125,3 +126,7 @@ def generate_plots_strassen():
 
     plt.tight_layout()
     plt.show()
+    
+    
+def generate_random_matrix(n):
+    return np.random.uniform(low=1e-8, high=1.0, size=(n, n)).tolist()

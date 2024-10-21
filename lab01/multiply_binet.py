@@ -2,6 +2,8 @@
 # O(n^3)
 
 import numpy as np
+import matplotlib.pyplot as plt
+import time
 
 def binet_matrix_multiply(A, B):
     """Matrix multiplication using Binét’s method
@@ -14,60 +16,108 @@ def binet_matrix_multiply(A, B):
         C : Matrix product of A and B
     """
     n = A.shape[0]
+    flops = [0]
+    
+    def pad_matrix(A):
+        """Matrix padding with zeros to make it a square matrix of size 2^k which
+        k is the smallest integer such that 2^k >= n
+
+        Args:
+            A : matrix
+
+        Returns:
+            C : Matrix padded with zeros
+        """
+        n = A.shape[0]
+        m = 1 << (n - 1).bit_length()
+        if n < m:
+            A = np.pad(A, ((0, m - n), (0, m - n)), mode='constant')
+        return A
+
+    def binet(A, B):
+        """Recursive matrix multiplication using Binét’s method
+
+        Args:
+            A : Matrix n x n, where n is a power of 2
+            B : Matrix n x n, where n is a power of 2
+            
+        Returns:
+            C : Matrix product of A and B
+        """
+        nonlocal flops
+        n = A.shape[0]
+
+        if n == 1:
+            flops[0] += 1
+            return A * B
+
+        mid = n // 2
+
+        A11 = A[:mid, :mid]
+        A12 = A[:mid, mid:]
+        A21 = A[mid:, :mid]
+        A22 = A[mid:, mid:]
+
+        B11 = B[:mid, :mid]
+        B12 = B[:mid, mid:]
+        B21 = B[mid:, :mid]
+        B22 = B[mid:, mid:]
+
+        C11 = binet(A11, B11) + binet(A12, B21)
+        flops[0] += mid**2
+        C12 = binet(A11, B12) + binet(A12, B22)
+        flops[0] += mid**2
+        C21 = binet(A21, B11) + binet(A22, B21)
+        flops[0] += mid**2
+        C22 = binet(A21, B12) + binet(A22, B22)
+        flops[0] += mid**2
+
+        C = np.vstack([np.hstack([C11, C12]), np.hstack([C21, C22])])
+        return C
+    
     
     A = pad_matrix(A)
     B = pad_matrix(B)
-    C = binet_matrix_multiply_recursive(A, B)
+    C = binet(A, B)
     
-    return C[:n, :n]
+    return C[:n, :n], flops
 
-def pad_matrix(A):
-    """Matrix padding with zeros to make it a square matrix of size 2^k which
-    k is the smallest integer such that 2^k >= n
 
-    Args:
-        A : matrix
+def generate_plots_binet():
+    sizes = range(1, 30)
+    times = []
+    operations = []
 
-    Returns:
-        C : Matrix padded with zeros
-    """
-    n = A.shape[0]
-    m = 1 << (n - 1).bit_length()
-    if n < m:
-        A = np.pad(A, ((0, m - n), (0, m - n)), mode='constant')
-    return A
-
-def binet_matrix_multiply_recursive(A, B):
-    """Recursive matrix multiplication using Binét’s method
-
-    Args:
-        A : Matrix n x n, where n is a power of 2
-        B : Matrix n x n, where n is a power of 2
+    for size in sizes:
+        A = generate_random_matrix(size)
+        B = generate_random_matrix(size)
         
-    Returns:
-        C : Matrix product of A and B
-    """
-    n = A.shape[0]
+        start_time = time.time()
+        result, flops = binet_matrix_multiply(A, B)
+        end_time = time.time()
+        
+        times.append(end_time - start_time)
+        operations.append(flops)
 
-    if n == 1:
-        return A * B
+    plt.figure(figsize=(12, 6))
 
-    mid = n // 2
+    plt.subplot(1, 2, 1)
+    plt.plot(sizes, times, label='Time (s)')
+    plt.xlabel('Matrix Size (n x n)')
+    plt.ylabel('Time (seconds)')
+    plt.title('Binet Multiplication Time vs Matrix Size')
+    plt.grid(True)
 
-    A11 = A[:mid, :mid]
-    A12 = A[:mid, mid:]
-    A21 = A[mid:, :mid]
-    A22 = A[mid:, mid:]
+    plt.subplot(1, 2, 2)
+    plt.plot(sizes, operations, label='Operations (Flops)', color='orange')
+    plt.xlabel('Matrix Size (n x n)')
+    plt.ylabel('Number of Operations')
+    plt.title('Binet Floating Point Operations vs Matrix Size')
+    plt.grid(True)
 
-    B11 = B[:mid, :mid]
-    B12 = B[:mid, mid:]
-    B21 = B[mid:, :mid]
-    B22 = B[mid:, mid:]
-
-    C11 = binet_matrix_multiply(A11, B11) + binet_matrix_multiply(A12, B21)
-    C12 = binet_matrix_multiply(A11, B12) + binet_matrix_multiply(A12, B22)
-    C21 = binet_matrix_multiply(A21, B11) + binet_matrix_multiply(A22, B21)
-    C22 = binet_matrix_multiply(A21, B12) + binet_matrix_multiply(A22, B22)
-
-    C = np.vstack([np.hstack([C11, C12]), np.hstack([C21, C22])])
-    return C
+    plt.tight_layout()
+    plt.show()
+    
+    
+def generate_random_matrix(n):
+    return np.random.uniform(low=1e-8, high=1.0, size=(n, n))

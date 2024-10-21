@@ -16,7 +16,7 @@ class TestMatrixMultiplicationBinet(unittest.TestCase):
         B = generate_random_matrix(n)
         
         expected = np.dot(A, B)
-        result = binet_matrix_multiply(A, B)
+        result, _ = binet_matrix_multiply(A, B)
         
         np.testing.assert_allclose(expected, result, rtol=1e-5, atol=1e-9)
         
@@ -26,7 +26,7 @@ class TestMatrixMultiplicationBinet(unittest.TestCase):
         B = np.eye(n)
         
         expected = np.dot(A, B)
-        result = binet_matrix_multiply(A, B)
+        result, _ = binet_matrix_multiply(A, B)
         
         np.testing.assert_allclose(expected, result, rtol=1e-5, atol=1e-9)
     
@@ -36,7 +36,7 @@ class TestMatrixMultiplicationBinet(unittest.TestCase):
         B = np.zeros((n, n))
         
         expected = np.dot(A, B)
-        result = binet_matrix_multiply(A, B)
+        result, _ = binet_matrix_multiply(A, B)
         
         np.testing.assert_allclose(expected, result,rtol=1e-5, atol=1e-9)
 
