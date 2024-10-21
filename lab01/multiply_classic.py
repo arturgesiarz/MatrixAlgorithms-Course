@@ -1,3 +1,5 @@
+import numpy as np
+
 
 def classic_matrix_multiply(A, B):
     """

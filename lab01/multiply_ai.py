@@ -3,8 +3,10 @@
 
 import numpy as np
 
+
 def generate_random_matrix(rows, cols):
     return np.random.uniform(1e-8, 1.0, (rows, cols))
+
 
 def multiply_ai(A, B):
 
