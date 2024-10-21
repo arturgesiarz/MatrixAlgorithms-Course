@@ -1,3 +1,6 @@
+# AI matrix multiplication based on an article in Nature - 
+# https://deepmind.google/discover/blog/discovering-novel-algorithms-with-alphatensor/#:~:text=In%20our%20paper,%20published%20today%20in%20Nature,%20we
+
 import numpy as np
 
 def generate_random_matrix(rows, cols):
