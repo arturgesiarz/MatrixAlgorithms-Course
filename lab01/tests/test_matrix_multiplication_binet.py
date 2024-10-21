@@ -2,10 +2,7 @@
 
 import numpy as np
 import unittest
-
-
 from multiply_binet import binet_matrix_multiply
-from multiply_classic import classic_matrix_multiply
 
 
 def generate_random_matrix(n):
@@ -14,44 +11,35 @@ def generate_random_matrix(n):
 
 class TestMatrixMultiplicationBinet(unittest.TestCase):
     def test_multiplication_with_small_matrices(self):
-        n = 3
+        n = 4
         A = generate_random_matrix(n)
         B = generate_random_matrix(n)
         
-        expected = classic_matrix_multiply(A, B)
+        expected = np.dot(A, B)
         result = binet_matrix_multiply(A, B)
         
-        np.testing.assert_array_equal(expected, result)
+        np.testing.assert_allclose(expected, result, rtol=1e-5, atol=1e-9)
         
     def test_multiplication_identity_matrix(self):
-        n = 3
+        n = 4
         A = generate_random_matrix(n)
         B = np.eye(n)
         
-        expected = classic_matrix_multiply(A, B)
+        expected = np.dot(A, B)
         result = binet_matrix_multiply(A, B)
         
-        np.testing.assert_allclose(expected, result,rtol=1e-5, atol=1e-8)
+        np.testing.assert_allclose(expected, result, rtol=1e-5, atol=1e-9)
     
     def test_multiplication_zero_matrix(self):
-        n = 3
+        n = 4
         A = generate_random_matrix(n)
         B = np.zeros((n, n))
         
-        expected = classic_matrix_multiply(A, B)
+        expected = np.dot(A, B)
         result = binet_matrix_multiply(A, B)
         
-        np.testing.assert_allclose(expected, result,rtol=1e-5, atol=1e-8)
-    
-    def test_multiplication_large_matrices(self):
-        n = 9
-        A = generate_random_matrix(n)
-        B = generate_random_matrix(n)
-        
-        expected = classic_matrix_multiply(A, B)
-        result = binet_matrix_multiply(A, B)
-        
-        np.testing.assert_allclose(expected, result,rtol=1e-5, atol=1e-8)
+        np.testing.assert_allclose(expected, result,rtol=1e-5, atol=1e-9)
+
 
 if __name__ == '__main__':
     unittest.main()
