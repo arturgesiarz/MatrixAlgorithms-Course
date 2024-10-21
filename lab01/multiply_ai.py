@@ -6,7 +6,6 @@ import numpy as np
 def generate_random_matrix(rows, cols):
     return np.random.uniform(1e-8, 1.0, (rows, cols))
 
-
 def multiply_ai(A, B):
 
     a11, a12, a13, a14, a15 = A[0, 0], A[0, 1], A[0, 2], A[0, 3], A[0, 4]
