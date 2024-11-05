@@ -37,7 +37,7 @@ def invert_matrix(A):
 
 # # Przykład użycia
 # A = np.array([[4, 7, 2, 5], [2, 6, 3, 3], [5, 8, 9, 3], [1,1,3,3]])
-# A_inv = invert_matrix_recursive_general(A)
+# A_inv = invert_matrix(A)
 # print("Macierz odwrotna:\n", A_inv)
 
 # # Sprawdzenie poprawności wyniku
