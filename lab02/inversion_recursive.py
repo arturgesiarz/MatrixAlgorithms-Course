@@ -49,10 +49,10 @@ def invert_matrix(A):
     return np.vstack((np.hstack((B11, B12)), np.hstack((B21, B22)))), sum(count)
 
 
-# Przykład użycia
-A = np.array([[4, 7, 2, 5], [2, 6, 3, 3], [5, 8, 9, 3], [1,1,3,3]])
-A_inv, flops = invert_matrix(A)
-print("Macierz odwrotna:\n", flops)
+# # Przykład użycia
+# A = np.array([[4, 7, 2, 5], [2, 6, 3, 3], [5, 8, 9, 3], [1,1,3,3]])
+# A_inv, flops = invert_matrix(A)
+# print("Macierz odwrotna:\n", flops)
 
-# Sprawdzenie poprawności wyniku
-print("Sprawdzenie: A * A_inv:\n", A @ A_inv)
+# # Sprawdzenie poprawności wyniku
+# print("Sprawdzenie: A * A_inv:\n", A @ A_inv)
