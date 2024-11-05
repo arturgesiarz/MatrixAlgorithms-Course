@@ -48,12 +48,12 @@ def lu_factorization(A):
   return L, U
 
 
-A = np.array([[4, 3, 2, 1],
-              [6, 3, 4, 2],
-              [2, 7, 3, 4],
-              [1, 8, 6, 4]])
+# A = np.array([[4, 3, 2, 1],
+#               [6, 3, 4, 2],
+#               [2, 7, 3, 4],
+#               [1, 8, 6, 4]])
 
-L, U = lu_factorization(A)
-print("Macierz L:\n", L)
-print("Macierz U:\n", U)
-print(L @ U)
+# L, U = lu_factorization(A)
+# print("Macierz L:\n", L)
+# print("Macierz U:\n", U)
+# print(L @ U)
