@@ -6,16 +6,10 @@ import math
 def split_matrix(A):
     mid = A.shape[0] // 2
     
-    if A.shape[0] % 2 != 0:
-        A11 = A[:mid+1, :mid+1]
-        A12 = A[:mid+1, mid+1:]
-        A21 = A[mid+1:, :mid+1]
-        A22 = A[mid+1:, mid+1:]
-    else:
-        A11 = A[:mid, :mid]
-        A12 = A[:mid, mid:]
-        A21 = A[mid:, :mid]
-        A22 = A[mid:, mid:]
+    A11 = A[:mid, :mid]
+    A12 = A[:mid, mid:]
+    A21 = A[mid:, :mid]
+    A22 = A[mid:, mid:]
         
     return A11,A12,A21,A22
 

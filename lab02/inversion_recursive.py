@@ -1,5 +1,6 @@
 import numpy as np
-import math
+import matplotlib.pyplot as plt
+import time
 from multiplication.strassen import strassen, split_matrix
 
 def generate_random_matrix(n):
@@ -10,9 +11,11 @@ def invert_matrix(A):
     mid = n // 2
     
     if n == 1:
+        A[0, 0] += 1e-10
         return np.array([[1 / A[0, 0]]]), 1
     
     A11, A12, A21, A22 = split_matrix(A)
+    
     count = [0] * 16
     
     # A11_inv = inverse(A11)
@@ -48,11 +51,60 @@ def invert_matrix(A):
     
     return np.vstack((np.hstack((B11, B12)), np.hstack((B21, B22)))), sum(count)
 
+def invert(A):
+    n = A.shape[0]
+    
+    def pad_matrix(A):
+            n = A.shape[0]
+            m = 1 << (n - 1).bit_length()
+            if n < m:
+                A = np.pad(A, ((0, m - n), (0, m - n)), mode='constant')
+            return A
+    
+    A = pad_matrix(A)
+    A_inv, flops = invert_matrix(A)
+    
+    return A_inv, flops
 
-# # Przykład użycia
-# A = np.array([[4, 7, 2, 5], [2, 6, 3, 3], [5, 8, 9, 3], [1,1,3,3]])
-# A_inv, flops = invert_matrix(A)
-# print("Macierz odwrotna:\n", flops)
+def generate_plot():
+    matrix_sizes = []
+    times = []
+    flopss = []
+    max_size = 50
 
-# # Sprawdzenie poprawności wyniku
-# print("Sprawdzenie: A * A_inv:\n", A @ A_inv)
+    for size in range(3, max_size + 1):
+        print(size)
+        matrix = np.array(generate_random_matrix(size))
+        
+        start_time = time.time()
+        A_inv, flops = invert(matrix)
+        
+        end_time = time.time()
+        
+        elapsed_time = end_time - start_time
+        matrix_sizes.append(size)
+        times.append(elapsed_time)
+        flopss.append(flops)
+        
+        assert np.allclose(matrix @ A_inv, np.eye(size), atol=1e-4)
+          
+    plt.figure(figsize=(12, 6))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(matrix_sizes, times, label='Czas działania (s)')
+    plt.xlabel('Rozmiar macierzy')
+    plt.ylabel('Czas działania (s)')
+    plt.title('Czas działania odwracania macierzy')
+
+
+    plt.subplot(1, 2, 2)
+    plt.plot(matrix_sizes, flopss, label='Liczba operacji')
+    plt.xlabel('Rozmiar macierzy')
+    plt.ylabel('Liczba operacji zmiennoprzecinkowych')
+    plt.title('Liczba operacji dla odwracania macierzy')
+
+    plt.tight_layout()
+    plt.show()
+
+
+# generate_plot()

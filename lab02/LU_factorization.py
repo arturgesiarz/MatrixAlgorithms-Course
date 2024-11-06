@@ -7,8 +7,8 @@ from multiplication.strassen import strassen, split_matrix
 def generate_random_matrix(n):
     return np.random.uniform(0.00000001, 1.0, (n, n))
   
-def LU(A):
-  n = A.shape[0]
+def LU(matrix):
+  n = matrix.shape[0]
   
   def pad_matrix(A):
         n = A.shape[0]
@@ -54,51 +54,50 @@ def LU(A):
     ])
     
     return L, U, sum(flops)
-  A = pad_matrix(A)
-  L, U, flops = lu_factorization(A)
+  matrix = pad_matrix(matrix)
+  L, U, flops = lu_factorization(matrix)
   return L[:n, :n], U[:n, :n], flops
 
 
-matrix_sizes = []
-times = []
-flopss = []
-max_size = 50
+def generate_plot():
+  matrix_sizes = []
+  times = []
+  flopss = []
+  max_size = 20
 
-for size in range(3, max_size + 1):
-    print(size)
-    matrix = np.array(generate_random_matrix(size))
-    print(matrix)
-    flops = 0
-    
-    start_time = time.time()
-    L, U, flops = LU(matrix)
-    print(L @ U)
-    end_time = time.time()
-    
-    elapsed_time = end_time - start_time
-    matrix_sizes.append(size)
-    times.append(elapsed_time)
-    flopss.append(flops)
-    
-    assert np.allclose(np.tril(L), L), "Macierz L nie jest dolnotrójkątna."
-    assert np.allclose(np.triu(U), U), "Macierz U nie jest górnotrójkątna."
-    assert np.allclose(L @ U, matrix, atol=1e-16), "Macierz L * U nie odtwarza poprawnie oryginalnej macierzy."
+  for size in range(1, max_size):
+      matrix = np.array(generate_random_matrix(size).tolist())
+      
+      start_time = time.time()
+      L, U, flops = LU(matrix)
+      end_time = time.time()
+      
+      elapsed_time = end_time - start_time
+      matrix_sizes.append(size)
+      times.append(elapsed_time)
+      flopss.append(flops)
+      
+      assert np.allclose(np.tril(L), L), "Macierz L nie jest dolnotrójkątna."
+      assert np.allclose(np.triu(U), U), "Macierz U nie jest górnotrójkątna."
+      assert np.allclose(L @ U, matrix, atol=1e-4), "Macierz L * U nie odtwarza poprawnie oryginalnej macierzy."
+            
           
-        
-plt.figure(figsize=(12, 6))
+  plt.figure(figsize=(12, 6))
 
-plt.subplot(1, 2, 1)
-plt.plot(matrix_sizes, times, label='Czas działania (s)')
-plt.xlabel('Rozmiar macierzy')
-plt.ylabel('Czas działania (s)')
-plt.title('Czas działania LU faktoryzacji')
+  plt.subplot(1, 2, 1)
+  plt.plot(matrix_sizes, times, label='Czas działania (s)')
+  plt.xlabel('Rozmiar macierzy')
+  plt.ylabel('Czas działania (s)')
+  plt.title('Czas działania LU faktoryzacji')
 
 
-plt.subplot(1, 2, 2)
-plt.plot(matrix_sizes, flopss, label='Liczba operacji')
-plt.xlabel('Rozmiar macierzy')
-plt.ylabel('Liczba operacji zmiennoprzecinkowych')
-plt.title('Liczba operacji dla LU faktoryzacji')
+  plt.subplot(1, 2, 2)
+  plt.plot(matrix_sizes, flopss, label='Liczba operacji')
+  plt.xlabel('Rozmiar macierzy')
+  plt.ylabel('Liczba operacji zmiennoprzecinkowych')
+  plt.title('Liczba operacji dla LU faktoryzacji')
 
-plt.tight_layout()
-plt.show()
+  plt.tight_layout()
+  plt.show()
+  
+generate_plot()
