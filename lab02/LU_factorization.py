@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-from inversion_recursive import invert_matrix
+from inversion_recursive import invert
 from multiplication.strassen import strassen, split_matrix
 
 def generate_random_matrix(n):
@@ -28,9 +28,9 @@ def LU(matrix):
     A11, A12, A21, A22 = split_matrix(A)
     
     L11, U11, flops[0] = lu_factorization(A11)
-    U11_inv, flops[1] = invert_matrix(U11)
+    U11_inv, flops[1] = invert(U11)
     L21, flops[2] = strassen(A21,U11_inv)
-    L11_inv, flops[3] = invert_matrix(L11)
+    L11_inv, flops[3] = invert(L11)
     
     U12, flops[4] = strassen(L11_inv, A12)
     

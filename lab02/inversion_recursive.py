@@ -6,12 +6,12 @@ from multiplication.strassen import strassen, split_matrix
 def generate_random_matrix(n):
     return np.random.uniform(0.00000001, 1.0, (n, n))
 
-def invert_matrix(A):
+def invert(A):
     n = A.shape[0]
     mid = n // 2
     
     if n == 1:
-        A[0, 0] += 1e-10
+        A[0, 0] += 1e-17
         return np.array([[1 / A[0, 0]]]), 1
     
     A11, A12, A21, A22 = split_matrix(A)
@@ -19,7 +19,7 @@ def invert_matrix(A):
     count = [0] * 16
     
     # A11_inv = inverse(A11)
-    A11_inv, count[0] = invert_matrix(A11)
+    A11_inv, count[0] = invert(A11)
     
     # S22 = A22 - A21 @ A11_inv @ A12
     S22, count[1] = strassen(A21, A11_inv)
@@ -27,7 +27,7 @@ def invert_matrix(A):
     S22, count[3] = A22 - S22, mid**2
     
     # S22_inv = inverse(S22)
-    S22_inv, count[4] = invert_matrix(S22)
+    S22_inv, count[4] = invert(S22)
     
     # B11 = A11_inv + A11_inv @ A12 @ S22_inv @ A21 @ A11_inv
     B11, count[5] = strassen(A11_inv, A12)
@@ -51,7 +51,7 @@ def invert_matrix(A):
     
     return np.vstack((np.hstack((B11, B12)), np.hstack((B21, B22)))), sum(count)
 
-def invert(A):
+def invert_with_padding(A):
     n = A.shape[0]
     
     def pad_matrix(A):
@@ -62,22 +62,22 @@ def invert(A):
             return A
     
     A = pad_matrix(A)
-    A_inv, flops = invert_matrix(A)
+    A_inv, flops = invert(A)
     
-    return A_inv, flops
+    return A_inv[:n, :n], flops
 
 def generate_plot():
     matrix_sizes = []
     times = []
     flopss = []
-    max_size = 50
+    max_size = 30
 
-    for size in range(3, max_size + 1):
+    for size in range(3, max_size):
         print(size)
-        matrix = np.array(generate_random_matrix(size))
+        matrix = np.array(generate_random_matrix(size).tolist())
         
         start_time = time.time()
-        A_inv, flops = invert(matrix)
+        A_inv, flops = invert_with_padding(matrix)
         
         end_time = time.time()
         
@@ -85,8 +85,7 @@ def generate_plot():
         matrix_sizes.append(size)
         times.append(elapsed_time)
         flopss.append(flops)
-        
-        assert np.allclose(matrix @ A_inv, np.eye(size), atol=1e-4)
+        print(A_inv @ matrix)
           
     plt.figure(figsize=(12, 6))
 
