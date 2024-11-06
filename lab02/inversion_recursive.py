@@ -70,7 +70,7 @@ def generate_plot():
     matrix_sizes = []
     times = []
     flopss = []
-    max_size = 30
+    max_size = 50
 
     for size in range(3, max_size):
         print(size)
@@ -106,4 +106,4 @@ def generate_plot():
     plt.show()
 
 
-# generate_plot()
+generate_plot()

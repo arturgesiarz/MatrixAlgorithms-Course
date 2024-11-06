@@ -31,7 +31,6 @@ def LU(matrix):
     U11_inv, flops[1] = invert(U11)
     L21, flops[2] = strassen(A21,U11_inv)
     L11_inv, flops[3] = invert(L11)
-    
     U12, flops[4] = strassen(L11_inv, A12)
     
     # S = A22 - A21 @ U11_inv @ L11_inv @ A12
@@ -63,7 +62,7 @@ def generate_plot():
   matrix_sizes = []
   times = []
   flopss = []
-  max_size = 20
+  max_size = 30
 
   for size in range(1, max_size):
       matrix = np.array(generate_random_matrix(size).tolist())
@@ -100,4 +99,4 @@ def generate_plot():
   plt.tight_layout()
   plt.show()
   
-generate_plot()
+# generate_plot()
