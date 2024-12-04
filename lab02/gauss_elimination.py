@@ -33,6 +33,10 @@ def gauss_det(matrix):
             for k in range(i, n):
                 matrix[j][k] -= ratio * matrix[i][k]
                 flops += 2 
+
+    if n == 5:
+        for line in matrix:
+            print(line)
     
 
     det = 1
