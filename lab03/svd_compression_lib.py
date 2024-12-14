@@ -74,18 +74,12 @@ def reconstruct_matrix(compressed_matrix):
 
 
 def create_rgb_matrices(image):
-    """
-    Split an image into R, G, B matrices.
-    """
     R = image[:, :, 0]
     G = image[:, :, 1]
     B = image[:, :, 2]
     return R, G, B
 
 def compress_image(image, rank, delta):
-    """
-    Compress each color channel of an image.
-    """
     R, G, B = create_rgb_matrices(image)
     compressed_R = compress_matrix(R, 0, R.shape[0]-1, 0, R.shape[1]-1, rank, delta)
     compressed_G = compress_matrix(G, 0, G.shape[0]-1, 0, G.shape[1]-1, rank, delta)
@@ -93,9 +87,6 @@ def compress_image(image, rank, delta):
     return compressed_R, compressed_G, compressed_B
 
 def visualize_compression(R, G, B, compressed_R, compressed_G, compressed_B):
-    """
-    Visualize the original and compressed matrices.
-    """
     plt.figure(figsize=(12, 6))
     plt.subplot(2, 3, 1)
     plt.title("Original R")
