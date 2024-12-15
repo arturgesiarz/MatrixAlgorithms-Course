@@ -2,8 +2,6 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
-import numpy as np
-
 def power_iteration(A, num_simulations=100):
     b = np.random.rand(A.shape[1])
     
@@ -15,8 +13,6 @@ def power_iteration(A, num_simulations=100):
     
     return b, eigenvalue
 
-
-import numpy as np
 
 def svd_decomposition(A, k, epsilon=1e-10):
     m, n = A.shape
