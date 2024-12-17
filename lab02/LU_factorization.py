@@ -64,7 +64,7 @@ def generate_plot():
   flopss = []
   max_size = 30
 
-  for size in range(1, max_size):
+  for size in range(249, 250):
       matrix = np.array(generate_random_matrix(size).tolist())
       
       start_time = time.time()
@@ -99,4 +99,4 @@ def generate_plot():
   plt.tight_layout()
   plt.show()
   
-# generate_plot()
+generate_plot()

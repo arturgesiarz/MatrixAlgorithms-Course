@@ -222,7 +222,7 @@ def draw_compression(original_image=None, max_rank=10, epsilon=1e-3, title=""):
 
 
 
-original_image = read_image_from_path('image.jpg')
+original_image = read_image_from_path('lab03/image.jpg')
 red_channel, green_channel, blue_channel = original_image[:, :, 0],original_image[:, :, 1], original_image[:, :, 2]
 max_rank = original_image.shape[0]
 _, red_S, _ = svd_decomposition(red_channel, max_rank)
